@@ -1,12 +1,27 @@
 {
   "name": "juicebox",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
+    "seed:dev": "nodemon ./db/seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheHighnote/Juicebox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheHighnote/Juicebox/issues"
+  },
+  "homepage": "https://github.com/TheHighnote/Juicebox#readme",
+  "description": "",
+  "dependencies": {
+    "pg": "^8.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
