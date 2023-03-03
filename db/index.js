@@ -66,15 +66,47 @@ async function updateUser(id, fields = {}) {
   }
 }
 
+async function createTags( tagList ) {
+  if (tagList.length === 0) {
+    return;
+  }
+
+  const insertValues = tagList.map(
+    (_, index) => `$${index + 1}`).join('), (');
+
+  const selectValues = tagList.map(
+    (_, index) => `$${index + 1}`).join(', ');
+  
+  try {
+    const {
+      rows: [tags],
+    } = await client.query(
+      `INSERT INTO tags(name)
+      VALUES ${insertValues}
+      ON CONFLICT (name) DO NOTHING
+      SELECT * FROM tags
+      WHERE name
+      IN ${selectValues};`
+      
+      [tagList]
+    );
+
+    return tags;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
 async function createPost({ authorId, title, content }) {
   try {
     const {
       rows: [post],
     } = await client.query(
-      `INSERT INTO posts(authorId, title, content)
-              VALUES ($1, $2, $3)
-            RETURNING *;
-            `,
+        `INSERT INTO posts(authorId, title, content)
+        VALUES ($1, $2, $3)
+        RETURNING *;`,
       [authorId, title, content]
     );
 
@@ -161,4 +193,5 @@ module.exports = {
   getAllPosts,
   updatePost,
   getUserById,
+  getPostsByUser
 };

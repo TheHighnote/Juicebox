@@ -7,6 +7,7 @@ const {
   createPost,
   updatePost,
   getUserById,
+  getPostsByUser
 } = require("./index");
 
 async function createInitialUsers() {
@@ -46,7 +47,9 @@ async function dropTables() {
   try {
     console.log("Starting to drop tables...");
     await client.query(`
-    DROP TABLE IF EXISTS posts;
+        DROP TABLE IF EXISTS postTags;
+        DROP TABLE IF EXISTS tags;
+        DROP TABLE IF EXISTS posts;
         DROP TABLE IF EXISTS users;
         `);
     console.log("Finished dropping tables!");
@@ -75,6 +78,15 @@ async function createTables() {
                 title VARCHAR(255) NOT NULL,
                 content TEXT NOT NULL,
                 active BOOLEAN DEFAULT true
+            );
+            CREATE TABLE tags(
+              id SERIAL PRIMARY KEY,
+              name VARCHAR(255) UNIQUE NOT NULL
+            );
+            CREATE TABLE postTags(
+              "postId" INTEGER REFERENCES posts(id),
+              "tagId" INTEGER REFERENCES tags(id),
+              Add a UNIQUE constraint on ("postId", "tagId") 
             );
             `);
     console.log("Finished building tables!");
