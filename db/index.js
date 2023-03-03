@@ -175,19 +175,22 @@ async function updatePost(id, fields = {}) {
 }
 
 async function getAllPosts() {
-  const { rows } = await client.query(
-    `SELECT 
-    id,
-    authorId, 
-    title,  
-    content,
-    active
+  try {
+    const { rows: postIds } = await client.query(
+      `SELECT 
+    id
     FROM posts;
     `
-  );
-  return rows;
-}
+    );
+    const posts = await Promise.all(
+      postIds.map((post) => getPostById(post.id))
+    );
 
+    return posts;
+  } catch (error) {
+    throw error;
+  }
+}
 async function getPostsByUser(userId) {
   try {
     const { rows: postIds } = await client.query(`
