@@ -11,7 +11,7 @@ async function getAllUsers() {
     name,
     location,
     active
-     FROM users;
+    FROM users;
         `
   );
   return rows;
@@ -23,8 +23,8 @@ async function createUser({ username, password, name, location }) {
       rows: [user],
     } = await client.query(
       `INSERT INTO users(username, password, name, location)
-        VALUES ($1, $2, $3, $4)
-        ON CONFLICT (username) DO NOTHING 
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (username) DO NOTHING 
       RETURNING *;
       `,
       [username, password, name, location]
@@ -78,7 +78,7 @@ async function createTags(tagList) {
   try {
     await client.query(
       `
-INSERT INTO tags(name)
+      INSERT INTO tags(name)
       VALUES (${insertValues})
       ON CONFLICT (name) DO NOTHING`,
       tagList
@@ -132,7 +132,7 @@ async function createPost({ authorId, title, content, tags = [] }) {
     const {
       rows: [post],
     } = await client.query(
-      `INSERT INTO posts(authorId, title, content)
+      `INSERT INTO posts("authorId", title, content)
         VALUES ($1, $2, $3)
         RETURNING *;`,
       [authorId, title, content]
@@ -159,7 +159,7 @@ try{
     await client.query(`
         UPDATE posts
         SET ${setString}
-        WHERE authorId=${postId}
+        WHERE id=${postId}
         RETURNING *;
       `, Object.values(fields));
 
@@ -210,7 +210,7 @@ async function getPostsByUser(userId) {
     const { rows: postIds } = await client.query(`
         SELECT id 
         FROM posts
-        WHERE authorId=${userId};
+        WHERE id=${userId};
       `);
 
     const posts = await Promise.all(
