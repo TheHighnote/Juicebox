@@ -4,6 +4,8 @@
   "main": "index.js",
   "scripts": {
     "seed:dev": "nodemon ./db/seed.js",
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -19,6 +21,8 @@
   "homepage": "https://github.com/TheHighnote/Juicebox#readme",
   "description": "",
   "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "pg": "^8.9.0"
   },
   "devDependencies": {
