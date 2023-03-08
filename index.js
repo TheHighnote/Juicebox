@@ -7,6 +7,9 @@ const server = express();
 const apiRouter = require("./api");
 const morgan = require("morgan");
 
+const cors = require("cors");
+server.use(cors());
+
 const { client } = require("./db");
 
 client.connect();
