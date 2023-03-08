@@ -8,7 +8,7 @@ const {
   updatePost,
   getUserById,
   getPostsByTagName,
-  getPostsByUser
+  getPostsByUser,
   // createTags,
   // addTagsToPost,
 } = require("./index");
@@ -87,9 +87,9 @@ async function createTables() {
               name VARCHAR(255) UNIQUE NOT NULL
             );
             CREATE TABLE post_tags(
-              postId INTEGER REFERENCES posts(id),
-              tagId INTEGER REFERENCES tags(id), 
-              UNIQUE (postId, tagId) 
+              "postId" INTEGER REFERENCES posts(id),
+              "tagId" INTEGER REFERENCES tags(id), 
+              UNIQUE ("postId", "tagId") 
             );
             `);
     console.log("Finished building tables!");
@@ -106,22 +106,25 @@ async function createInitialPosts() {
     await createPost({
       authorId: albert.id,
       title: "First Post",
-      content: "This is my first post. I hope I love writing blogs as much as I love writing them.",
-      tags: ["#happy", "#youcandoanything"]
+      content:
+        "This is my first post. I hope I love writing blogs as much as I love writing them.",
+      tags: ["#happy", "#youcandoanything"],
     });
 
     await createPost({
       authorId: sandra.id,
       title: "First Post bfkhfgshjfgf",
-      content: "This is my first post. I hope I love writing blogs as much as I love writing them.",
-      tags: ["#happy", "#worst-day-ever"]
+      content:
+        "This is my first post. I hope I love writing blogs as much as I love writing them.",
+      tags: ["#happy", "#worst-day-ever"],
     });
 
     await createPost({
       authorId: glamgal.id,
       title: "First Post ywgyigwf",
-      content: "This is my first post. I hope I love writing blogs as much as I love writing them.",
-      tags: ["#happy", "#youcandoanything", "#canmandoeverything"]
+      content:
+        "This is my first post. I hope I love writing blogs as much as I love writing them.",
+      tags: ["#happy", "#youcandoanything", "#canmandoeverything"],
     });
 
     // a couple more
@@ -161,7 +164,7 @@ async function rebuildDB() {
     await createInitialUsers();
     await createInitialPosts();
   } catch (error) {
-    console.log("Error during rebuildDB")
+    console.log("Error during rebuildDB");
     throw error;
   }
 }
@@ -192,7 +195,7 @@ async function testDB() {
 
     console.log("Calling updatePost on posts[1], only updating tags");
     const updatePostTagsResult = await updatePost(posts[1].id, {
-      tags: ["#youcandoanything", "#redfish", "#bluefish"]
+      tags: ["#youcandoanything", "#redfish", "#bluefish"],
     });
 
     console.log("Calling getPostsByTagName with #happy");

@@ -110,9 +110,9 @@ async function createPostTag(postId, tagId) {
   try {
     await client.query(
       `
-          INSERT INTO post_tags(postId, tagId)
+          INSERT INTO post_tags("postId", "tagId")
           VALUES ($1, $2)
-          ON CONFLICT (postId, tagId) DO NOTHING;
+          ON CONFLICT ("postId", "tagId") DO NOTHING;
         `,
       [postId, tagId]
     );
@@ -182,9 +182,9 @@ async function updatePost(postId, fields = {}) {
     await client.query(
       `
     DELETE FROM post_tags
-    WHERE tagId
+    WHERE "tagId"
     NOT IN (${tagListIdString})
-    AND postId=$1;
+    AND "postId"=$1;
   `,
       [postId]
     );
@@ -281,8 +281,8 @@ async function getPostById(postId) {
       `
         SELECT tags.*
         FROM tags
-        JOIN post_tags ON tags.id=post_tags.tagId
-        WHERE post_tags.postId=$1;
+        JOIN post_tags ON tags.id=post_tags."tagId"
+        WHERE post_tags."postId"=$1;
       `,
       [postId]
     );
@@ -314,8 +314,8 @@ async function getPostsByTagName(tagName) {
       `
       SELECT posts.id
       FROM posts
-      JOIN post_tags ON posts.id=post_tags.postId
-      JOIN tags ON tags.id=post_tags.tagId
+      JOIN post_tags ON posts.id=post_tags."postId"
+      JOIN tags ON tags.id=post_tags."tagId"
       WHERE tags.name=$1;
     `,
       [tagName]

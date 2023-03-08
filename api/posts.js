@@ -5,9 +5,12 @@ const { requireUser } = require("./utils");
 
 postsRouter.post("/", requireUser, async (req, res, next) => {
   const { title, content, tags = "" } = req.body;
-  const authorId = req.user.id;
   const tagArr = tags.trim().split(/\s+/);
+  const authorId = req.user.id;
   const postData = { authorId, title, content };
+  // postData.authorId = "1"; works if we hard code "1" but cannot get id off of req.user.id
+  console.log("@@@@", postData);
+  console.log("&&&&&&", req.body);
 
   // only send the tags if there are some to send
   if (tagArr.length) {
