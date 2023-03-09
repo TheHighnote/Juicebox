@@ -1,8 +1,15 @@
 // inside db/index.js
 const { Client } = require("pg"); // imports the pg module
-const connectionString = process.env.DATABASE_URL || "postgres://localhost:5432/juicebox"
+const connectionString =
+  process.env.DATABASE_URL || "postgres://localhost:5432/juicebox";
 // supply the db name and location of the database
-const client = new Client({connectionString, ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,});
+const client = new Client({
+  connectionString,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : undefined,
+});
 
 async function getAllUsers() {
   const { rows } = await client.query(
@@ -277,12 +284,12 @@ async function getPostById(postId) {
       [postId]
     );
 
-      if (!post) {
-        throw {
-          name: "PostNotFoundError",
-          message: "Could not find a post with that postId"
-        };
-      }
+    if (!post) {
+      throw {
+        name: "PostNotFoundError",
+        message: "Could not find a post with that postId",
+      };
+    }
 
     const { rows: tags } = await client.query(
       `

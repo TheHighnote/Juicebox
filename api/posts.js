@@ -23,7 +23,6 @@ postsRouter.patch("/:postId", requireUser, async (req, res, next) => {
 
   try {
     const originalPost = await getPostById(postId);
-
     if (originalPost.author.id === req.user[0].id) {
       const updatedPost = await updatePost(postId, updateFields);
       res.send({ post: updatedPost });
@@ -71,30 +70,30 @@ postsRouter.use((req, res, next) => {
 });
 
 postsRouter.get("/", async (req, res, next) => {
-  try{
-  const allPosts = await getAllPosts();
+  try {
+    const allPosts = await getAllPosts();
 
-  const posts = allPosts.filter(post => {
-    if (post.active) {
-      return true;
-    }
+    const posts = allPosts.filter((post) => {
+      if (post.active) {
+        return true;
+      }
 
-    if (req.user && post.author.id === req.user[0].id) {
-      return true;
-    }
+      if (req.user && post.author.id === req.user[0].id) {
+        return true;
+      }
 
-    return false;
-  })
+      return false;
+    });
 
-  res.send({
-    posts
-  });
-} catch ({name, message}) {
-  next({name, message});
-}
+    res.send({
+      posts,
+    });
+  } catch ({ name, message }) {
+    next({ name, message });
+  }
 });
 
-postsRouter.delete('/:postId', requireUser, async (req, res, next) => {
+postsRouter.delete("/:postId", requireUser, async (req, res, next) => {
   try {
     const post = await getPostById(req.params.postId);
 
@@ -103,16 +102,20 @@ postsRouter.delete('/:postId', requireUser, async (req, res, next) => {
 
       res.send({ post: updatedPost });
     } else {
-      next(post ? {
-        name: "UnauthorizedUserError",
-        message: "You cannot delete a post which is not yours"
-      } : {
-        name: "PostNotFoundError",
-        message: "That post does not exist"
-      });
+      next(
+        post
+          ? {
+              name: "UnauthorizedUserError",
+              message: "You cannot delete a post which is not yours",
+            }
+          : {
+              name: "PostNotFoundError",
+              message: "That post does not exist",
+            }
+      );
     }
-  } catch ({name, message}) {
-    next({name, message})
+  } catch ({ name, message }) {
+    next({ name, message });
   }
 });
 
