@@ -7,21 +7,19 @@ tagsRouter.get("/:tagName/posts", async (req, res, next) => {
   const { tagName } = req.params;
   try {
     const postsWithTagName = await getPostsByTagName(tagName);
-    
-    const posts = allPosts.filter(post => {
-      if (post.false) {
-        return false;
-      }
-      if (req.user && post.author.id !== req.user[0].id) {
-        return false;
-      }
-        return true;
-    
-      }) 
-      // use our method to get posts by tag name from the db
-      // send out an object to the client { posts: // the posts }
-      res.send(postsWithTagName);
 
+    const posts = postsWithTagName.filter((post) => {
+      // if (post.active) {
+      //   return true;
+      // }
+      if (post.active && req.user && post.author.id === req.user[0].id) {
+        return true;
+      }
+      return false;
+    });
+    // use our method to get posts by tag name from the db
+    // send out an object to the client { posts: // the posts }
+    res.send(posts);
   } catch ({ name, message }) {
     // forward the name and message to the error handler
     next({ name, message });
